@@ -1,6 +1,8 @@
+from textwrap import dedent
+
 from docx import Document
 from docx.enum.table import WD_TABLE_ALIGNMENT
-from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.text import WD_ALIGN_PARAGRAPH,WD_TAB_ALIGNMENT
 from docx.shared import Pt
 from docx.oxml.ns import nsdecls, qn
 from docx.oxml import parse_xml, OxmlElement
@@ -184,15 +186,19 @@ def get_header(header_text='RENTAL APPLICATION'):
 def get_header_paragrah(text):
     header_paragraph = document.add_paragraph()
     header_paragraph_text = f'''
-        Property Address: {text}
-        Unit #: {text}
-        City, State, ZIP: {text}
-        Date of Application: {text}
+    Property Address: {text}
+    Unit #: {text}
+    City, State, ZIP: {text}
+    Date of Application: {text}
     '''
+    header_paragraph.aligmnet = WD_TAB_ALIGNMENT
+    header_paragraph.paragraph_format.space_before = Pt(0)
     header_paragraph_font = header_paragraph.style.font
     header_paragraph_font.name = 'Calibri'
     header_paragraph_font.size = Pt(12)
-    header_paragraph.add_run(header_paragraph_text).bold = True
+    header_paragraph.add_run(dedent(header_paragraph_text)).bold = True
+
+
 
 
 def get_table_applicant_information():
@@ -208,18 +214,21 @@ def get_table_applicant_information():
     row_second_cells = table_applicant_information.rows[1].cells
     for cell, initial in enumerate(initials):
         if cell%2 != 0:
-            set_cell_border(row_second_cells[cell],bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+            set_cell_border(row_second_cells[cell],bottom={"sz": 10, "color": "#000000", "val": "single"})
         row_second_cells[cell].text = initial
+        row_second_cells[cell].vertical_aligment = WD_ALIGN_PARAGRAPH.CENTER
     row_third_cells = table_applicant_information.rows[2].cells
     for cell, contact_information in enumerate(contact_informations):
         if cell%2 != 0:
-            set_cell_border(row_third_cells[cell],bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+            set_cell_border(row_third_cells[cell],bottom={"sz": 10, "color": "#000000", "val": "single"})
         row_third_cells[cell].text = contact_information
     row_fourth_cells = table_applicant_information.rows[3].cells
     for cell, document_information in enumerate(document_informations):
         if cell%2 != 0:
-            set_cell_border(row_fourth_cells[cell],bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+            set_cell_border(row_fourth_cells[cell],bottom={"sz": 10, "color": "#000000", "val": "single"})
         row_fourth_cells[cell].text = document_information
+
+
 
 
 def get_table_additional_occupant(rows=4):
@@ -235,7 +244,7 @@ def get_table_additional_occupant(rows=4):
         row_cells = table_additional_occupant.rows[row].cells
         for cell, occupant_param in enumerate(occupant_params):
             if cell % 2 != 0:
-                set_cell_border(row_cells[cell], bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+                set_cell_border(row_cells[cell], bottom={"sz": 10, "color": "#000000", "val": "single"})
             row_cells[cell].text = occupant_param
 
 
@@ -247,51 +256,51 @@ def get_table_residence_history():
     header_cell._tc.get_or_add_tcPr().append(table_header_color)
 
     second_row = table_residence_history.rows[1].cells
-    second_0_2_row = get_merge_cells(table_residence_history, 1, 0, 2)
-    second_0_2_row.text = 'Current Address'
-    second_3_6_row = get_merge_cells(table_residence_history, 1, 3, 6)
-    set_cell_border(second_3_6_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    second_0_3_row = get_merge_cells(table_residence_history, 1, 0, 3)
+    second_0_3_row.text = 'Current Address'
+    second_4_6_row = get_merge_cells(table_residence_history, 1, 4, 6)
+    set_cell_border(second_4_6_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
     second_7_8_row = get_merge_cells(table_residence_history, 1, 7, 8)
     second_7_8_row.text = 'Unit #'
     second_9_10_row = get_merge_cells(table_residence_history, 1, 9, 10)
-    set_cell_border(second_9_10_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(second_9_10_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
     second_row[11].text = 'Rent'
     second_row[13].text = 'Own'
 
     third_row = table_residence_history.rows[2].cells
     third_row[0].text = 'City'
     third_1_2_row = get_merge_cells(table_residence_history, 2, 1, 2)
-    set_cell_border(third_1_2_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(third_1_2_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
     third_row[3].text = 'State'
     third_4_6_row = get_merge_cells(table_residence_history, 2, 4, 6)
-    set_cell_border(third_4_6_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(third_4_6_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
     third_row[7].text = 'ZIP'
     third_8_9_row =  get_merge_cells(table_residence_history, 2, 8, 9)
-    set_cell_border(third_8_9_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(third_8_9_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
     third_10_11_row =  get_merge_cells(table_residence_history, 2, 10, 11)
     third_10_11_row.text = 'Monthly Payment or Rent $'
     third_12_14_row = get_merge_cells(table_residence_history, 2, 12, 14)
-    set_cell_border(third_12_14_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(third_12_14_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
 
     fourth_0_3_row = get_merge_cells(table_residence_history, 3, 0, 3)
     fourth_0_3_row.text = 'Dates of Residence'
     fourth_4_7_row = get_merge_cells(table_residence_history, 3, 4, 7)
     fourth_4_7_row.text = '__/__/____ to __/__/____'
-    set_cell_border(fourth_4_7_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(fourth_4_7_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
     fourth_8_9_row = get_merge_cells(table_residence_history, 3, 8, 9)
     fourth_8_9_row.text ='Present Landlord'
     fourth_10_11_row = get_merge_cells(table_residence_history, 3, 10, 11)
-    set_cell_border(fourth_10_11_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(fourth_10_11_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
     fourth_11_12_row = get_merge_cells(table_residence_history, 3, 11, 12)
     fourth_11_12_row.text = 'Landlord Phone#'
     fourth_13_14_row = get_merge_cells(table_residence_history, 3, 13, 14)
-    set_cell_border(fourth_13_14_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(fourth_13_14_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
 
 
     fifth_0_3_row =  get_merge_cells(table_residence_history, 4, 0, 3)
     fifth_0_3_row.text = 'Reason for moving out'
     fifth_4_13_row = get_merge_cells(table_residence_history, 4, 4, 13)
-    set_cell_border(fifth_4_13_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(fifth_4_13_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
 
 def get_privious_address():
     table_residence_history = document.add_table(4, 15)
@@ -299,47 +308,48 @@ def get_privious_address():
     second_0_2_row = get_merge_cells(table_residence_history, 0, 0, 2)
     second_0_2_row.text = 'Previous Address'
     second_3_6_row = get_merge_cells(table_residence_history, 0, 3, 6)
-    set_cell_border(second_3_6_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(second_3_6_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
     second_7_8_row = get_merge_cells(table_residence_history, 0, 7, 8)
     second_7_8_row.text = 'Unit #'
     second_9_10_row = get_merge_cells(table_residence_history, 0, 9, 10)
-    set_cell_border(second_9_10_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(second_9_10_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
     second_row[11].text = 'Rent'
     second_row[13].text = 'Own'
 
     third_row = table_residence_history.rows[1].cells
     third_row[0].text = 'City'
     third_1_2_row = get_merge_cells(table_residence_history, 1, 1, 2)
-    set_cell_border(third_1_2_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(third_1_2_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
     third_row[3].text = 'State'
     third_4_6_row = get_merge_cells(table_residence_history, 1, 4, 6)
-    set_cell_border(third_4_6_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(third_4_6_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
     third_row[7].text = 'ZIP'
     third_8_9_row = get_merge_cells(table_residence_history, 1, 8, 9)
-    set_cell_border(third_8_9_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(third_8_9_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
     third_10_11_row = get_merge_cells(table_residence_history, 1, 10, 11)
     third_10_11_row.text = 'Monthly Payment or Rent $'
     third_12_14_row = get_merge_cells(table_residence_history, 1, 12, 14)
-    set_cell_border(third_12_14_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(third_12_14_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
 
     fourth_0_3_row = get_merge_cells(table_residence_history, 2, 0, 3)
     fourth_0_3_row.text = 'Dates of Residence'
     fourth_4_7_row = get_merge_cells(table_residence_history, 2, 4, 7)
     fourth_4_7_row.text = '__/__/____ to __/__/____'
-    set_cell_border(fourth_4_7_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(fourth_4_7_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
     fourth_8_9_row = get_merge_cells(table_residence_history, 2, 8, 9)
     fourth_8_9_row.text = 'Previous Landlord'
     fourth_10_11_row = get_merge_cells(table_residence_history, 2, 10, 11)
-    set_cell_border(fourth_10_11_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(fourth_10_11_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
     fourth_11_12_row = get_merge_cells(table_residence_history, 2, 11, 12)
     fourth_11_12_row.text = 'Landlord Phone#'
     fourth_13_14_row = get_merge_cells(table_residence_history, 2, 13, 14)
-    set_cell_border(fourth_13_14_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(fourth_13_14_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
 
     fifth_0_3_row = get_merge_cells(table_residence_history, 3, 0, 3)
     fifth_0_3_row.text = 'Reason for moving out'
     fifth_4_13_row = get_merge_cells(table_residence_history, 3, 4, 13)
-    set_cell_border(fifth_4_13_row, bottom={"sz": 10, "color": "#00FF00", "val": "single"})
+    set_cell_border(fifth_4_13_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
+
 
 
 get_header()

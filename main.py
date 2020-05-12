@@ -15,7 +15,7 @@ from docx.oxml.ns import qn
 import docx
 import random
 
-document = Document()
+
 
 def addCheckbox(para, box_id, name):
     run = para.add_run()
@@ -192,12 +192,10 @@ def get_header_paragrah(text):
     Date of Application: {text}
     '''
     header_paragraph.aligmnet = WD_TAB_ALIGNMENT
-    header_paragraph.paragraph_format.space_before = Pt(0)
     header_paragraph_font = header_paragraph.style.font
     header_paragraph_font.name = 'Calibri'
     header_paragraph_font.size = Pt(12)
     header_paragraph.add_run(dedent(header_paragraph_text)).bold = True
-
 
 
 
@@ -206,6 +204,8 @@ def get_table_applicant_information():
     contact_informations = ['Email','','Phone #1','','Phone #2','']
     document_informations = ['Date of Birth','_ _/ _ _/ _ _ _ _','Social Security #','','Driver’s License #','']
     table_applicant_information = document.add_table(rows=4,cols=6)
+    table_applicant_information.allow_autofit = False
+    table_applicant_information.style.paragraph_format.space_after = Pt(100)
     header_cell = get_merge_cells(table_applicant_information,0,0,5)
     header_cell.text = 'APPLICANT INFORMATION'
     table_header_color = parse_xml(r'<w:shd {} w:fill="1F5C8B"/>'.format(nsdecls('w')))
@@ -230,12 +230,10 @@ def get_table_applicant_information():
 
 
 
-
 def get_table_additional_occupant(rows=4):
     occupant_params = ['Name','','Relationship','','Age','']
     table_additional_occupant = document.add_table(rows=rows, cols=6)
     header_cell = get_merge_cells(table_additional_occupant,0,0,5)
-
     header_cell.text = 'ADDITIONAL OCCUPANT(S)'
     table_header_color = parse_xml(r'<w:shd {} w:fill="1F5C8B"/>'.format(nsdecls('w')))
     header_cell._tc.get_or_add_tcPr().append(table_header_color)
@@ -351,12 +349,13 @@ def get_privious_address():
     set_cell_border(fifth_4_13_row, bottom={"sz": 10, "color": "#000000", "val": "single"})
 
 
-
-get_header()
-get_header_paragrah('oleh')
-get_table_applicant_information()
-get_table_additional_occupant()
-get_table_residence_history()
-get_privious_address()
-document.save('test1.docx')
+if __name__=='__main__':
+    document = Document()
+    get_header()
+    get_header_paragrah('oleh')
+    get_table_applicant_information()
+    get_table_additional_occupant()
+    get_table_residence_history()
+    get_privious_address()
+    document.save('test1.docx')
 

@@ -1,8 +1,8 @@
 from textwrap import dedent
 
 from docx import Document
-from docx.enum.table import WD_TABLE_ALIGNMENT
-from docx.enum.text import WD_ALIGN_PARAGRAPH,WD_TAB_ALIGNMENT
+from docx.enum.table import WD_TABLE_ALIGNMENT, WD_CELL_VERTICAL_ALIGNMENT
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT, WD_TAB_ALIGNMENT
 from docx.shared import Pt, Cm
 from docx.oxml.ns import nsdecls, qn
 from docx.oxml import parse_xml, OxmlElement
@@ -14,59 +14,6 @@ from docx.oxml.ns import qn
 
 import docx
 import random
-
-
-
-def addCheckbox(para, box_id, name):
-    run = para.add_run()
-    tag = run._r
-    fld = docx.oxml.shared.OxmlElement('w:fldChar')
-    fld.set(docx.oxml.ns.qn('w:fldCharType'), 'begin')
-
-    ffData = docx.oxml.shared.OxmlElement('w:ffData')
-    e = docx.oxml.shared.OxmlElement('w:name')
-    e.set(docx.oxml.ns.qn('w:val'), 'Check1')
-    ffData.append(e)
-    ffData.append(docx.oxml.shared.OxmlElement('w:enabled'))
-    e = docx.oxml.shared.OxmlElement('w:calcOnExit')
-    e.set(docx.oxml.ns.qn('w:val'), '0')
-    ffData.append(e)
-    e = docx.oxml.shared.OxmlElement('w:checkBox')
-    e.append(docx.oxml.shared.OxmlElement('w:sizeAuto'))
-    ee = docx.oxml.shared.OxmlElement('w:default')
-    ee.set(docx.oxml.ns.qn('w:val'), '0')
-    e.append(ee)
-    ffData.append(e)
-
-    fld.append(ffData)
-    tag.append(fld)
-
-    run2 = para.add_run()
-    tag2 = run2._r
-    start = docx.oxml.shared.OxmlElement('w:bookmarkStart')
-    start.set(docx.oxml.ns.qn('w:id'), str(box_id))
-    start.set(docx.oxml.ns.qn('w:name'), name)
-    tag2.append(start)
-
-    run3 = para.add_run()
-    tag3 = run3._r
-    instr = docx.oxml.OxmlElement('w:instrText')
-    instr.text = 'FORMCHECKBOX'
-    tag3.append(instr)
-
-    run4 = para.add_run()
-    tag4 = run4._r
-    fld2 = docx.oxml.shared.OxmlElement('w:fldChar')
-    fld2.set(docx.oxml.ns.qn('w:fldCharType'), 'end')
-    tag4.append(fld2)
-
-    run5 = para.add_run()
-    tag5 = run5._r
-    end = docx.oxml.shared.OxmlElement('w:bookmarkEnd')
-    end.set(docx.oxml.ns.qn('w:id'), str(box_id))
-    end.set(docx.oxml.ns.qn('w:name'), name)
-    tag5.append(end)
-
 
 
 def addCheckbox(para, box_id, name):
@@ -178,12 +125,13 @@ def get_merge_cells(table,row,start,end):
 
 def get_header(header_text='RENTAL APPLICATION'):
     header = document.add_heading(header_text, 1)
-    header.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    header.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
     header_font = header.style.font
     header_font.name = 'Calibri'
-    header_font.size = Pt(20)
+    header_font.size = Pt(10)
 
-def get_header_paragrah(text):
+
+def get_header_paragraph(text):
     header_paragraph = document.add_paragraph()
     header_paragraph_text = f'''
     Property Address: {text}
@@ -198,57 +146,58 @@ def get_header_paragrah(text):
     header_paragraph.add_run(dedent(header_paragraph_text)).bold = True
 
 
-
 def get_table_applicant_information():
-    initials = ['First Name','','Middle Name','','Last Name','']
-    contact_informations = ['Email','','Phone #1','','Phone #2','']
+    initials = ['First Name','Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor','Middle Name','','Last Name','']
+    contact_informations = ['Email','Lorem ipsum dolor sit amet, consectetur adipiscing elit','Phone #1','','Phone #2','']
     document_informations = ['Date of Birth','_ _/ _ _/ _ _ _ _','Social Security #','','Driver’s License #','']
     table_applicant_information = document.add_table(rows=4,cols=6)
 
-    header_paragraph = document.add_paragraph()
-    header_paragraph.aligmnet = WD_TAB_ALIGNMENT
-    header_paragraph_font = header_paragraph.style.font
-    header_paragraph_font.name = 'Calibri'
-    header_paragraph_font.size = Pt(10)
 
-
-
-    table_applicant_information.style.paragraph_format.space_after = Pt(100)
     header_cell = get_merge_cells(table_applicant_information,0,0,5)
     header_cell.text = 'APPLICANT INFORMATION'
     table_header_color = parse_xml(r'<w:shd {} w:fill="1F5C8B"/>'.format(nsdecls('w')))
     header_cell._tc.get_or_add_tcPr().append(table_header_color)
 
+    for row in range(4):
+        for cell in range(6):
+            table_applicant_information.cell(row, cell).vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+            if cell % 2 != 0:
+                set_cell_border(table_applicant_information.cell(row, cell), bottom={"sz": 6, "color": "#000000", "val": "single"})
+
     row_second_cells = table_applicant_information.rows[1].cells
     for cell, initial in enumerate(initials):
-        if cell%2 != 0:
-            set_cell_border(row_second_cells[cell],bottom={"sz": 6, "color": "#000000", "val": "single"})
         row_second_cells[cell].text = initial
-        row_second_cells[cell].vertical_aligment = WD_ALIGN_PARAGRAPH.CENTER
+
     row_third_cells = table_applicant_information.rows[2].cells
     for cell, contact_information in enumerate(contact_informations):
-        if cell%2 != 0:
-            set_cell_border(row_third_cells[cell],bottom={"sz": 6, "color": "#000000", "val": "single"})
         row_third_cells[cell].text = contact_information
+
     row_fourth_cells = table_applicant_information.rows[3].cells
     for cell, document_information in enumerate(document_informations):
-        if cell%2 != 0:
-            set_cell_border(row_fourth_cells[cell],bottom={"sz": 6, "color": "#000000", "val": "single"})
         row_fourth_cells[cell].text = document_information
 
+    header_paragraph = document.add_paragraph()
+    header_paragraph_font = header_paragraph.style.font
+    header_paragraph_font.name = 'Calibri'
+    header_paragraph_font.size = Pt(12)
 
 
 def get_table_additional_occupant(rows=4):
     occupant_params = ['Name','','Relationship','','Age','']
     table_additional_occupant = document.add_table(rows=rows, cols=6)
 
-    table_additional_occupant.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    paragraph = document.add_paragraph()
-    paragraph_format = paragraph.paragraph_format
+    # table_additional_occupant.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+
+    #table_additional_occupant.table.rows[0].height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+
     # paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    paragraph = document.add_paragraph()
+    paragraph.aligmnet = WD_TAB_ALIGNMENT
     paragraph_font = paragraph.style.font
     paragraph_font.name = 'Calibri'
     paragraph_font.size = Pt(10)
+
 
     header_cell = get_merge_cells(table_additional_occupant,0,0,5)
     header_cell.text = 'ADDITIONAL OCCUPANT(S)'
@@ -370,12 +319,12 @@ if __name__=='__main__':
     document = Document()
     sections = document.sections
     for section in sections:
-        section.top_margin = Cm(1)
+        section.top_margin = Cm(0.5)
         section.bottom_margin = Cm(1)
         section.left_margin = Cm(1)
         section.right_margin = Cm(1)
     get_header()
-    get_header_paragrah('oleh')
+    get_header_paragraph('test')
     get_table_applicant_information()
     get_table_additional_occupant()
     get_table_residence_history()

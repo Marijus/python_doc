@@ -362,11 +362,10 @@ def get_table_employment_information():
     second_row.cells[0].width = Inches(1.4)
 
     set_cell_border(second_row.cells[1], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
-    second_row.cells[1].width = Inches(2.6)
+    second_row.cells[1].width = Inches(2.2)
 
     get_merge_cells(table_employment_information, 1, 2, 3)
     second_row.cells[2].text = 'Position/Title'
-    second_row.cells[2].width = Inches(1.4)
 
     get_merge_cells(table_employment_information, 1, 4, 7)
     set_cell_border(second_row.cells[4], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
@@ -379,7 +378,6 @@ def get_table_employment_information():
 
     get_merge_cells(table_employment_information, 2, 2, 3)
     third_row.cells[2].text = 'Phone #'
-    third_row.cells[2].width = Inches(1.4)
 
     get_merge_cells(table_employment_information, 2, 4, 7)
     set_cell_border(third_row.cells[4], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
@@ -389,6 +387,7 @@ def get_table_employment_information():
     fourth_row.cells[0].text = 'Address'
     set_cell_border(fourth_row.cells[1], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
     fourth_row.cells[2].text = 'City'
+    fourth_row.cells[2].width = Inches(0.5)
     set_cell_border(fourth_row.cells[3], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
     fourth_row.cells[4].text = 'State'
     set_cell_border(fourth_row.cells[5], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
@@ -398,67 +397,14 @@ def get_table_employment_information():
     fifth_row = table_employment_information.rows[4]
 
     fifth_row.cells[0].text = 'Dates of Employment'
-    fifth_row.cells[0].width = Inches(2)
 
     set_cell_border(fifth_row.cells[1], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
-    fifth_row.cells[1].width = Inches(2.6)
 
     get_merge_cells(table_employment_information, 4, 2, 3)
     fifth_row.cells[2].text = 'Monthly Income $'
-    fifth_row.cells[2].width = Inches(1.7)
 
     get_merge_cells(table_employment_information, 4, 4, 7)
     set_cell_border(fifth_row.cells[4], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
-
-
-# def get_table_employment_information_no_header():
-#
-#     table_employment_information = document.add_table(rows=4, cols=8)
-#
-#     employment_information = ['Current Employer', '', 'Position/Title', '']
-#
-#     second_row = table_employment_information.rows[0]
-#     second_row.cells[0].text = 'Current Employer'
-#     second_row.cells[0].width = Inches(1.4)
-#     second_row.cells[1].width = Inches(2.6)
-#     set_cell_border(second_row.cells[1], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
-#     get_merge_cells(table_employment_information, 0, 2, 3)
-#     second_row.cells[2].text = 'Position/Title'
-#     second_row.cells[2].width = Inches(1.4)
-#     set_cell_border(second_row.cells[4], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
-#     get_merge_cells(table_employment_information, 0, 4, 7)
-#
-#     third_row = table_employment_information.rows[1]
-#     third_row.cells[0].text = 'Supervisor'
-#     third_row.cells[0].width = Inches(1.4)
-#     third_row.cells[1].width = Inches(2.6)
-#     set_cell_border(third_row.cells[1], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
-#     get_merge_cells(table_employment_information, 1, 2, 3)
-#     third_row.cells[2].text = 'Phone #'
-#     third_row.cells[2].width = Inches(1.4)
-#     set_cell_border(third_row.cells[4], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
-#     get_merge_cells(table_employment_information, 1, 4, 7)
-#
-#     fourth_row = table_employment_information.rows[2]
-#     fourth_row.cells[0].text = 'Address'
-#     set_cell_border(fourth_row.cells[1], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
-#     fourth_row.cells[2].text = 'City'
-#     set_cell_border(fourth_row.cells[3], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
-#     fourth_row.cells[4].text = 'State'
-#     set_cell_border(fourth_row.cells[5], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
-#     fourth_row.cells[6].text = 'ZIP'
-#     set_cell_border(fourth_row.cells[7], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
-#
-#     fifth_row = table_employment_information.rows[3]
-#     fifth_row.cells[0].text = 'Dates of Employment'
-#     fifth_row.cells[0].width = Inches(2)
-#     fifth_row.cells[1].width = Inches(2.6)
-#     set_cell_border(fifth_row.cells[1], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
-#     get_merge_cells(table_employment_information, 3, 2, 3)
-#     fifth_row.cells[2].text = 'Monthly Income $'
-#     fifth_row.cells[2].width = Inches(1.7)
-#     set_cell_border(fifth_row.cells[4], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
-#     get_merge_cells(table_employment_information, 3, 4, 7)
 
 
 def get_table_additional_income():

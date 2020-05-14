@@ -7,3 +7,4 @@ __pycache__/
 *julia-space.py
 .DS_Store
 *.docx
+!RECREATE.docx

@@ -8,8 +8,9 @@ from docx.enum.text import WD_PARAGRAPH_ALIGNMENT, WD_TAB_ALIGNMENT
 from docx.shared import Pt, Cm, Inches, RGBColor
 from docx.oxml.ns import nsdecls, qn
 
-
 CHECK_BOX = u" □ "
+
+
 # font functions
 def set_cell_border(cell, **kwargs):
     """
@@ -50,6 +51,7 @@ def set_cell_border(cell, **kwargs):
                 if key in edge_data:
                     element.set(qn('w:{}'.format(key)), str(edge_data[key]))
 
+
 def set_cell_margins(cell: _Cell, **kwargs):
     """
     cell:  actual cell instance you want to modify
@@ -79,11 +81,13 @@ def set_cell_margins(cell: _Cell, **kwargs):
 
     tcPr.append(tcMar)
 
-def get_merge_cells(table,row,start,end):
+
+def get_merge_cells(table, row, start, end):
     start_cell = table.cell(row, start)
     end_cell = table.cell(row, end)
     new_cell = start_cell.merge(end_cell)
     return new_cell
+
 
 def set_table_alignment(table):
     for row in table.rows:
@@ -118,16 +122,15 @@ def get_header_paragraph(text):
 
 
 def get_table_applicant_information():
+    initials = ['First Name', '', 'Middle Name', '', 'Last Name', '']
+    contact_informations = ['Email', '', 'Phone #1', '', 'Phone #2', '']
+    document_informations = ['Date of Birth', '_ _/ _ _/ _ _ _ _', 'Social Security #', '', 'Driver’s License #', '']
 
-    initials = ['First Name','','Middle Name','','Last Name','']
-    contact_informations = ['Email','','Phone #1','','Phone #2','']
-    document_informations = ['Date of Birth','_ _/ _ _/ _ _ _ _','Social Security #','','Driver’s License #','']
-
-    table_applicant_information = document.add_table(rows=4,cols=6)
+    table_applicant_information = document.add_table(rows=4, cols=6)
 
     table_applicant_information.autofit = False
 
-    header_cell = get_merge_cells(table_applicant_information,0,0,5)
+    header_cell = get_merge_cells(table_applicant_information, 0, 0, 5)
     header_cell.text = 'APPLICANT INFORMATION'
     table_header_color = parse_xml(r'<w:shd {} w:fill="#1f3864"/>'.format(nsdecls('w')))
     header_cell._tc.get_or_add_tcPr().append(table_header_color)
@@ -168,12 +171,10 @@ def get_table_additional_occupant(rows=4):
     paragraph_font.name = 'Calibri'
     paragraph_font.size = Pt(10)
 
-
-    header_cell = get_merge_cells(table_additional_occupant,0,0,6)
+    header_cell = get_merge_cells(table_additional_occupant, 0, 0, 6)
     header_cell.text = 'ADDITIONAL OCCUPANT(S)'
     table_header_color = parse_xml(r'<w:shd {} w:fill="#1f3864"/>'.format(nsdecls('w')))
     header_cell._tc.get_or_add_tcPr().append(table_header_color)
-
 
     for row in range(1, rows):
         column = table_additional_occupant.rows[row].cells
@@ -502,8 +503,7 @@ def get_table_additional_income():
 
     current_row.cells[0].text = 'additional income'.upper()
 
-    for i in range(1,3):
-
+    for i in range(1, 3):
         current_row = table_additional_income.rows[i]
 
         current_row.cells[0].text = 'Source of Income'
@@ -516,7 +516,7 @@ def get_table_additional_income():
 
 
 def get_table_vehicle_information():
-    vehicle_information_text = ['Make','','Model','','Year','','State','','Plate #']
+    vehicle_information_text = ['Make', '', 'Model', '', 'Year', '', 'State', '', 'Plate #']
     table_vehicle_information = document.add_table(rows=3, cols=10)
     header_cell = get_merge_cells(table_vehicle_information, 0, 0, 9)
     header_cell.text = 'VEHICLE INFORMATION'
@@ -525,10 +525,10 @@ def get_table_vehicle_information():
 
     table_vehicle_information.autofit = False
 
-    for row_number in range(1,3):
+    for row_number in range(1, 3):
         row = table_vehicle_information.rows[row_number].cells
         for cell in range(10):
-            if cell%2 == 0:
+            if cell % 2 == 0:
                 row[cell].text = vehicle_information_text[cell]
                 row[cell].width = Inches(0.55)
             else:
@@ -648,10 +648,10 @@ def get_table_additional_questions():
 
     table_additional_questions.autofit = False
 
-    for row_number in range(1,12):
-        if row_number%2 != 0:
+    for row_number in range(1, 12):
+        if row_number % 2 != 0:
             row_0_4 = get_merge_cells(table_additional_questions, row_number, 0, 4)
-            row_0_4.text = questions[row_number//2]
+            row_0_4.text = questions[row_number // 2]
             row_5_6 = get_merge_cells(table_additional_questions, row_number, 5, 6)
             row_5_6.text = f'YES {CHECK_BOX} NO {CHECK_BOX}'
             row_7_11 = get_merge_cells(table_additional_questions, row_number, 7, 11)
@@ -687,7 +687,7 @@ def get_additionals_questions_text():
 
 
 def get_table_sign():
-    table_sign = document.add_table(4,3)
+    table_sign = document.add_table(4, 3)
 
     first_row = table_sign.rows[0].cells
     first_row[0].text = ''
@@ -706,9 +706,9 @@ def get_table_sign():
 
     third_row = table_sign.rows[2].cells
     third_row[0].text = ''
-    set_cell_border(third_row [0], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(third_row[0], bottom={"sz": 6, "color": "#000000", "val": "single"})
     third_row[1].text = ''
-    set_cell_border(third_row [2], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(third_row[2], bottom={"sz": 6, "color": "#000000", "val": "single"})
 
     fourth_row = table_sign.rows[3].cells
     first_date_parg = fourth_row[0].add_paragraph('Date')
@@ -734,7 +734,7 @@ def get_table_sign():
     # table_sign.rows[3].cells[0].text = 'Date'
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
 
     document = Document()
 
@@ -779,4 +779,3 @@ if __name__=='__main__':
         set_table_alignment(table)
 
     document.save('test_doc.docx')
-

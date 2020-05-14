@@ -536,7 +536,7 @@ def get_table_vehicle_information():
 def get_table_pets_information():
     table_pets_information = document.add_table(rows=2, cols=13)
     header_cell = get_merge_cells(table_pets_information, 0, 0, 12)
-    header_cell.text = 'VEHICLE INFORMATION'
+    header_cell.text = 'pets information'.upper()
     table_header_color = parse_xml(r'<w:shd {} w:fill="#1f3864"/>'.format(nsdecls('w')))
     header_cell._tc.get_or_add_tcPr().append(table_header_color)
 

@@ -166,7 +166,7 @@ def get_table_additional_occupant(rows=4):
 
     for row in table_additional_occupant.rows:
         row.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
-        row.height = Cm(0.60)
+        row.height = Cm(0.62)
     paragraph = document.add_paragraph()
     paragraph.aligmnet = WD_TAB_ALIGNMENT
     paragraph_font = paragraph.style.font
@@ -197,159 +197,181 @@ def get_table_additional_occupant(rows=4):
 
 
 def get_table_residence_history():
-    table_residence_history = document.add_table(5,15)
-    header_cell = get_merge_cells(table_residence_history, 0, 0, 14)
-    header_cell.text = 'RESIDENCE HISTORY'
+    table_residence_history = document.add_table(rows=5, cols=14)
+
+    for index, column in enumerate(table_residence_history.columns):
+        for cell in column.cells:
+            if index in [0, 1]:
+                cell.width = Inches(0.75)
+            elif index in [6, 7, 10, 11]:
+                cell.width = Inches(0.6)
+            else:
+                cell.width = Inches(0.475)
+
+    i = 0
+    get_merge_cells(table_residence_history, i, 0, len(table_residence_history.columns) - 1)
+
+    current_row = table_residence_history.rows[i]
+
     table_header_color = parse_xml(r'<w:shd {} w:fill="#1f3864"/>'.format(nsdecls('w')))
-    header_cell._tc.get_or_add_tcPr().append(table_header_color)
+    current_row.cells[0]._tc.get_or_add_tcPr().append(table_header_color)
 
-    table_residence_history.autofit = False
-    for row in table_residence_history.rows:
-        row.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
-        row.height = Cm(0.64)
+    current_row.cells[0].text = 'residence history'.upper()
 
-    for row in range(1,5):
-        row_cell = table_residence_history.rows[row].cells
-        for cell in range(0,2):
-            row_cell[cell].width = Inches(0.35)
+    i = 1
+    get_merge_cells(table_residence_history, i, 0, 1)
+    get_merge_cells(table_residence_history, i, 2, 5)
+    get_merge_cells(table_residence_history, i, 6, 7)
+    get_merge_cells(table_residence_history, i, 8, 9)
 
-    paragraph = document.add_paragraph()
-    paragraph.aligmnet = WD_TAB_ALIGNMENT
-    paragraph_font = paragraph.style.font
-    paragraph_font.name = 'Calibri'
-    paragraph_font.size = Pt(10)
+    current_row = table_residence_history.rows[i]
 
-    second_row = table_residence_history.rows[1].cells
-    second_0_2_row = get_merge_cells(table_residence_history, 1, 0, 2)
-    second_0_2_row.text = 'Current Address'
-    second_0_2_row.width = Inches(1.2)
-    second_3_7_row = get_merge_cells(table_residence_history, 1, 3, 7)
-    set_cell_border(second_3_7_row, bottom={"sz": 6, "color": "#000000", "val": "single"},)
-    second_row[8].text = 'Unit #'
-    second_9_10_row = get_merge_cells(table_residence_history, 1, 9, 10)
-    set_cell_border(second_9_10_row, bottom={"sz": 6, "color": "#000000", "val": "single"})
-    second_row[11].text = 'Rent'
-    second_row[12].text = u"  □  "
-    second_row[13].text = 'Own'
-    second_row[14].text = u"  □  "
+    current_row.cells[0].text = 'Current Address'
+    current_row.cells[6].text = 'Unit #'
+    current_row.cells[10].text = 'Rent'
+    current_row.cells[11].text = u"  □  "
+    current_row.cells[12].text = 'Own'
+    current_row.cells[13].text = u"  □  "
 
-    third_row = table_residence_history.rows[2].cells
-    third_row[0].text = 'City'
-    third_1_2_row = get_merge_cells(table_residence_history, 2, 1, 2)
-    set_cell_border(third_1_2_row, bottom={"sz": 6, "color": "#000000", "val": "single"})
-    third_row[3].text = 'State'
-    third_4_5_row = get_merge_cells(table_residence_history, 2, 4, 5)
-    set_cell_border(third_4_5_row, bottom={"sz": 6, "color": "#000000", "val": "single"})
-    third_row[6].text = 'ZIP'
-    third_7_8_row = get_merge_cells(table_residence_history, 2, 7, 8)
-    set_cell_border(third_7_8_row, bottom={"sz": 6, "color": "#000000", "val": "single"})
-    third_9_12_row =  get_merge_cells(table_residence_history, 2, 9, 12)
-    third_9_12_row.text = 'Monthly Payment or Rent $'
-    third_13_14_row = get_merge_cells(table_residence_history, 2, 13, 14)
-    set_cell_border(third_13_14_row, bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[2], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[8], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[11], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[13], bottom={"sz": 6, "color": "#000000", "val": "single"})
 
-    fourth_row = table_residence_history.rows[3].cells
-    fourth_0_2_row = get_merge_cells(table_residence_history, 3, 0, 2)
-    fourth_0_2_row.text = 'Dates of Residence'
-    fourth_row[3].width = Inches(0.75)
-    fourth_row[4].width = Inches(0.65)
-    fourth_3_5_row = get_merge_cells(table_residence_history, 3, 3, 5)
-    fourth_3_5_row.text = f'__/__/____ to __/__/____'
-    set_cell_border(fourth_3_5_row, bottom={"sz": 6, "color": "#000000", "val": "single"})
-    fourth_row[6].width = Inches(0.1)
-    fourth_6_8_row = get_merge_cells(table_residence_history, 3, 6, 8)
-    fourth_6_8_row.text ='Present Landlord'
-    set_cell_border(fourth_row[9], bottom={"sz": 6, "color": "#000000", "val": "single"})
-    fourth_row[9].width = Inches(0.5)
-    fourth_10_12_row = get_merge_cells(table_residence_history, 3, 10, 12)
-    fourth_10_12_row.text = 'Landlord Phone#'
-    fourth_row[13].width = Inches(0.25)
-    fourth_row[14].width = Inches(0.25)
-    fourth_13_14_row = get_merge_cells(table_residence_history, 3, 13, 14)
-    set_cell_border(fourth_13_14_row, bottom={"sz": 6, "color": "#000000", "val": "single"})
+    i = 2
+    get_merge_cells(table_residence_history, i, 6, 9)
+    get_merge_cells(table_residence_history, i, 10, 13)
 
-    fifth_0_2_row =  get_merge_cells(table_residence_history, 4, 0, 2)
-    fifth_0_2_row.text = 'Reason for moving out'
-    fifth_3_14_row = get_merge_cells(table_residence_history, 4, 3, 14)
-    set_cell_border(fifth_3_14_row, bottom={"sz": 6, "color": "#000000", "val": "single"})
+    current_row = table_residence_history.rows[i]
+
+    current_row.cells[0].text = 'City'
+    current_row.cells[2].text = 'State'
+    current_row.cells[4].text = 'ZIP'
+    current_row.cells[6].text = 'Monthly Payment or Rent $'
+
+    set_cell_border(current_row.cells[1], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[3], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[5], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[10], bottom={"sz": 6, "color": "#000000", "val": "single"})
+
+    i = 3
+    get_merge_cells(table_residence_history, i, 0, 1)
+    get_merge_cells(table_residence_history, i, 2, 5)
+    get_merge_cells(table_residence_history, i, 6, 7)
+    get_merge_cells(table_residence_history, i, 8, 9)
+    get_merge_cells(table_residence_history, i, 10, 11)
+    get_merge_cells(table_residence_history, i, 12, 13)
+
+    current_row = table_residence_history.rows[i]
+
+    current_row.cells[0].text = 'Dates of Residence'
+    current_row.cells[2].text = f'__/__/____ to __/__/____'
+    current_row.cells[6].text = 'Present Landlord'
+    current_row.cells[10].text = 'Landlord Phone#'
+
+    set_cell_border(current_row.cells[2], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[8], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[12], bottom={"sz": 6, "color": "#000000", "val": "single"})
+
+    i = 4
+    get_merge_cells(table_residence_history, i, 0, 1)
+    get_merge_cells(table_residence_history, i, 2, len(table_residence_history.columns) - 1)
+
+    current_row = table_residence_history.rows[i]
+
+    current_row.cells[0].text = 'Reason for moving out'
+
+    set_cell_border(current_row.cells[2], bottom={"sz": 6, "color": "#000000", "val": "single"})
 
 
-def get_privious_address():
-    table_residence_history = document.add_table(4, 15)
+def get_table_residence_history_no_header():
+    table_residence_history = document.add_table(rows=4, cols=14)
 
-    table_residence_history.autofit = False
-    for row in table_residence_history.rows:
-        row.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
-        row.height = Cm(0.64)
+    for index, column in enumerate(table_residence_history.columns):
+        for cell in column.cells:
+            if index in [0, 1]:
+                cell.width = Inches(0.75)
+            elif index in [6, 7, 10, 11]:
+                cell.width = Inches(0.6)
+            else:
+                cell.width = Inches(0.475)
 
-    for row in range(0, 4):
-        row_cell = table_residence_history.rows[row].cells
-        for cell in range(0, 2):
-            row_cell[cell].width = Inches(0.35)
+    i = 0
+    get_merge_cells(table_residence_history, i, 0, 1)
+    get_merge_cells(table_residence_history, i, 2, 5)
+    get_merge_cells(table_residence_history, i, 6, 7)
+    get_merge_cells(table_residence_history, i, 8, 9)
 
-    paragraph = document.add_paragraph()
-    paragraph.aligmnet = WD_TAB_ALIGNMENT
-    paragraph_font = paragraph.style.font
-    paragraph_font.name = 'Calibri'
-    paragraph_font.size = Pt(10)
+    current_row = table_residence_history.rows[i]
 
-    second_row = table_residence_history.rows[0].cells
-    second_0_2_row = get_merge_cells(table_residence_history, 0, 0, 2)
-    second_0_2_row.text = 'Previous Address'
-    second_0_2_row.width = Inches(1.2)
-    second_3_7_row = get_merge_cells(table_residence_history, 0, 3, 7)
-    set_cell_border(second_3_7_row, bottom={"sz": 6, "color": "#000000", "val": "single"}, )
-    second_row[8].text = 'Unit #'
-    second_9_10_row = get_merge_cells(table_residence_history, 0, 9, 10)
-    set_cell_border(second_9_10_row, bottom={"sz": 6, "color": "#000000", "val": "single"})
-    second_row[11].text = 'Rent'
-    second_row[12].text = u"  □  "
-    second_row[13].text = 'Own'
-    second_row[14].text = u"  □  "
+    current_row.cells[0].text = 'Previous Address'
+    current_row.cells[6].text = 'Unit #'
+    current_row.cells[10].text = 'Rent'
+    current_row.cells[11].text = u"  □  "
+    current_row.cells[12].text = 'Own'
+    current_row.cells[13].text = u"  □  "
 
-    third_row = table_residence_history.rows[1].cells
-    third_row[0].text = 'City'
-    third_1_2_row = get_merge_cells(table_residence_history, 1, 1, 2)
-    set_cell_border(third_1_2_row, bottom={"sz": 6, "color": "#000000", "val": "single"})
-    third_row[3].text = 'State'
-    third_4_5_row = get_merge_cells(table_residence_history, 1, 4, 5)
-    set_cell_border(third_4_5_row, bottom={"sz": 6, "color": "#000000", "val": "single"})
-    third_row[6].text = 'ZIP'
-    third_7_8_row = get_merge_cells(table_residence_history, 1, 7, 8)
-    set_cell_border(third_7_8_row, bottom={"sz": 6, "color": "#000000", "val": "single"})
-    third_9_12_row = get_merge_cells(table_residence_history, 1, 9, 12)
-    third_9_12_row.text = 'Monthly Payment or Rent $'
-    third_13_14_row = get_merge_cells(table_residence_history, 1, 13, 14)
-    set_cell_border(third_13_14_row, bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[2], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[8], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[11], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[13], bottom={"sz": 6, "color": "#000000", "val": "single"})
 
-    fourth_row = table_residence_history.rows[2].cells
-    fourth_0_2_row = get_merge_cells(table_residence_history, 2, 0, 2)
-    fourth_0_2_row.text = 'Dates of Residence'
-    fourth_row[3].width = Inches(0.75)
-    fourth_row[4].width = Inches(0.65)
-    fourth_3_5_row = get_merge_cells(table_residence_history, 2, 3, 5)
-    fourth_3_5_row.text = f'__/__/____ to __/__/____'
-    set_cell_border(fourth_3_5_row, bottom={"sz": 6, "color": "#000000", "val": "single"})
-    fourth_row[6].width = Inches(0.1)
-    fourth_6_8_row = get_merge_cells(table_residence_history, 2, 6, 8)
-    fourth_6_8_row.text = 'Previous Landlord'
-    set_cell_border(fourth_row[9], bottom={"sz": 6, "color": "#000000", "val": "single"})
-    fourth_row[9].width = Inches(0.5)
-    fourth_10_12_row = get_merge_cells(table_residence_history, 2, 10, 12)
-    fourth_10_12_row.text = 'Landlord Phone#'
-    fourth_row[13].width = Inches(0.25)
-    fourth_row[14].width = Inches(0.25)
-    fourth_13_14_row = get_merge_cells(table_residence_history, 2, 13, 14)
-    set_cell_border(fourth_13_14_row, bottom={"sz": 6, "color": "#000000", "val": "single"})
+    i = 1
+    get_merge_cells(table_residence_history, i, 6, 9)
+    get_merge_cells(table_residence_history, i, 10, 13)
 
-    fifth_0_2_row = get_merge_cells(table_residence_history, 3, 0, 2)
-    fifth_0_2_row.text = 'Reason for moving out'
-    fifth_3_14_row = get_merge_cells(table_residence_history, 3, 3, 14)
-    set_cell_border(fifth_3_14_row, bottom={"sz": 6, "color": "#000000", "val": "single"})
+    current_row = table_residence_history.rows[i]
+
+    current_row.cells[0].text = 'City'
+    current_row.cells[2].text = 'State'
+    current_row.cells[4].text = 'ZIP'
+    current_row.cells[6].text = 'Monthly Payment or Rent $'
+
+    set_cell_border(current_row.cells[1], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[3], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[5], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[10], bottom={"sz": 6, "color": "#000000", "val": "single"})
+
+    i = 2
+    get_merge_cells(table_residence_history, i, 0, 1)
+    get_merge_cells(table_residence_history, i, 2, 5)
+    get_merge_cells(table_residence_history, i, 6, 7)
+    get_merge_cells(table_residence_history, i, 8, 9)
+    get_merge_cells(table_residence_history, i, 10, 11)
+    get_merge_cells(table_residence_history, i, 12, 13)
+
+    current_row = table_residence_history.rows[i]
+
+    current_row.cells[0].text = 'Dates of Residence'
+    current_row.cells[2].text = f'__/__/____ to __/__/____'
+    current_row.cells[6].text = 'Present Landlord'
+    current_row.cells[10].text = 'Landlord Phone#'
+
+    set_cell_border(current_row.cells[2], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[8], bottom={"sz": 6, "color": "#000000", "val": "single"})
+    set_cell_border(current_row.cells[12], bottom={"sz": 6, "color": "#000000", "val": "single"})
+
+    i = 3
+    get_merge_cells(table_residence_history, i, 0, 1)
+    get_merge_cells(table_residence_history, i, 2, len(table_residence_history.columns) - 1)
+
+    current_row = table_residence_history.rows[i]
+
+    current_row.cells[0].text = 'Reason for moving out'
+
+    set_cell_border(current_row.cells[2], bottom={"sz": 6, "color": "#000000", "val": "single"})
 
 
 def get_table_employment_information():
     table_employment_information = document.add_table(rows=5, cols=8)
+
+    for row in table_employment_information.rows:
+        for cell in row.cells:
+            cell.width = Inches(0.7)
+
+    for row in table_employment_information.rows:
+        row.cells[0].width = Inches(1.4)
+        row.cells[1].width = Inches(2.1)
 
     header_cell = get_merge_cells(table_employment_information, 0, 0, 7)
     header_cell.text = 'employment information'.upper()
@@ -359,10 +381,8 @@ def get_table_employment_information():
     second_row = table_employment_information.rows[1]
 
     second_row.cells[0].text = 'Current Employer'
-    second_row.cells[0].width = Inches(1.4)
 
     set_cell_border(second_row.cells[1], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
-    second_row.cells[1].width = Inches(2.2)
 
     get_merge_cells(table_employment_information, 1, 2, 3)
     second_row.cells[2].text = 'Position/Title'
@@ -387,7 +407,6 @@ def get_table_employment_information():
     fourth_row.cells[0].text = 'Address'
     set_cell_border(fourth_row.cells[1], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
     fourth_row.cells[2].text = 'City'
-    fourth_row.cells[2].width = Inches(0.5)
     set_cell_border(fourth_row.cells[3], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
     fourth_row.cells[4].text = 'State'
     set_cell_border(fourth_row.cells[5], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
@@ -404,6 +423,65 @@ def get_table_employment_information():
     fifth_row.cells[2].text = 'Monthly Income $'
 
     get_merge_cells(table_employment_information, 4, 4, 7)
+    set_cell_border(fifth_row.cells[4], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
+
+
+def get_table_employment_information_no_header():
+    table_employment_information = document.add_table(rows=4, cols=8)
+
+    for row in table_employment_information.rows:
+        for cell in row.cells:
+            cell.width = Inches(0.7)
+
+    for row in table_employment_information.rows:
+        row.cells[0].width = Inches(1.4)
+        row.cells[1].width = Inches(2.1)
+
+    second_row = table_employment_information.rows[0]
+
+    second_row.cells[0].text = 'Previous Employer'
+
+    set_cell_border(second_row.cells[1], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
+
+    get_merge_cells(table_employment_information, 0, 2, 3)
+    second_row.cells[2].text = 'Position/Title'
+
+    get_merge_cells(table_employment_information, 0, 4, 7)
+    set_cell_border(second_row.cells[4], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
+
+    third_row = table_employment_information.rows[1]
+
+    third_row.cells[0].text = 'Supervisor'
+
+    set_cell_border(third_row.cells[1], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
+
+    get_merge_cells(table_employment_information, 1, 2, 3)
+    third_row.cells[2].text = 'Phone #'
+
+    get_merge_cells(table_employment_information, 1, 4, 7)
+    set_cell_border(third_row.cells[4], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
+
+    fourth_row = table_employment_information.rows[2]
+
+    fourth_row.cells[0].text = 'Address'
+    set_cell_border(fourth_row.cells[1], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
+    fourth_row.cells[2].text = 'City'
+    set_cell_border(fourth_row.cells[3], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
+    fourth_row.cells[4].text = 'State'
+    set_cell_border(fourth_row.cells[5], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
+    fourth_row.cells[6].text = 'ZIP'
+    set_cell_border(fourth_row.cells[7], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
+
+    fifth_row = table_employment_information.rows[3]
+
+    fifth_row.cells[0].text = 'Dates of Employment'
+
+    set_cell_border(fifth_row.cells[1], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
+
+    get_merge_cells(table_employment_information, 3, 2, 3)
+    fifth_row.cells[2].text = 'Monthly Income $'
+
+    get_merge_cells(table_employment_information, 3, 4, 7)
     set_cell_border(fifth_row.cells[4], bottom={"sz": 6, "color": "#000000", "val": "single"}, )
 
 
@@ -532,6 +610,7 @@ def get_table_personal_references():
     paragraph_font = paragraph.style.font
     paragraph_font.name = 'Calibri'
     paragraph_font.size = Pt(10)
+
 
 def get_extra_table_personal_references():
     table_personal_references = document.add_table(rows=2, cols=8)
@@ -689,15 +768,17 @@ if __name__=='__main__':
     get_table_applicant_information()
     get_table_additional_occupant()
     get_table_residence_history()
-    get_privious_address()
-    get_privious_address()
+    document.add_paragraph()
+    get_table_residence_history_no_header()
+    document.add_paragraph()
+    get_table_residence_history_no_header()
     document.add_page_break()
     get_table_employment_information()
     document.add_paragraph()
-    # get_table_employment_information_no_header()
-    # document.add_paragraph()
-    # get_table_employment_information_no_header()
-    # document.add_paragraph()
+    get_table_employment_information_no_header()
+    document.add_paragraph()
+    get_table_employment_information_no_header()
+    document.add_paragraph()
     get_table_additional_income()
     document.add_paragraph()
     get_table_vehicle_information()
@@ -713,8 +794,7 @@ if __name__=='__main__':
     get_table_sign()
 
     for table in document.tables:
-        table.autofit = False
         set_table_alignment(table)
 
-    document.save('test1.docx')
+    document.save('test_doc.docx')
 

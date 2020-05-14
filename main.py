@@ -87,6 +87,7 @@ def get_merge_cells(table,row,start,end):
 
 def set_table_alignment(table):
     for row in table.rows:
+        row.height = Inches(0.25)
         for cell in row.cells:
             cell.paragraphs[0].paragraph_format.space_after = Pt(0)
             cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
@@ -125,8 +126,6 @@ def get_table_applicant_information():
     table_applicant_information = document.add_table(rows=4,cols=6)
 
     table_applicant_information.autofit = False
-    for row in table_applicant_information.rows:
-        row.height = Cm(0.7)
 
     header_cell = get_merge_cells(table_applicant_information,0,0,5)
     header_cell.text = 'APPLICANT INFORMATION'
@@ -163,8 +162,6 @@ def get_table_additional_occupant(rows=4):
 
     table_additional_occupant.autofit = False
 
-    for row in table_additional_occupant.rows:
-        row.height = Cm(0.62)
     paragraph = document.add_paragraph()
     paragraph.aligmnet = WD_TAB_ALIGNMENT
     paragraph_font = paragraph.style.font
@@ -491,8 +488,6 @@ def get_table_additional_income():
     header_cell._tc.get_or_add_tcPr().append(table_header_color)
 
     table_additional_income.autofit = False
-    for row in table_additional_income.rows:
-        row.height = Cm(0.64)
 
     for row_number in range(1,3):
         row = table_additional_income.rows[row_number].cells
@@ -520,8 +515,6 @@ def get_table_vehicle_information():
     header_cell._tc.get_or_add_tcPr().append(table_header_color)
 
     table_vehicle_information.autofit = False
-    for row in table_vehicle_information.rows:
-        row.height = Cm(0.64)
 
     for row_number in range(1,3):
         row = table_vehicle_information.rows[row_number].cells
@@ -548,8 +541,6 @@ def get_table_pets_information():
     header_cell._tc.get_or_add_tcPr().append(table_header_color)
 
     table_pets_information.autofit = False
-    for row in table_pets_information.rows:
-        row.height = Cm(0.64)
 
     row = table_pets_information.rows[1].cells
     row[0].text = 'Pet(s)'
@@ -580,8 +571,6 @@ def get_table_personal_references():
     header_cell._tc.get_or_add_tcPr().append(table_header_color)
 
     table_personal_references.autofit = False
-    for row in table_personal_references.rows:
-        row.height = Cm(0.64)
 
     second_row = table_personal_references.rows[1].cells
     second_row[0].text = 'Full Name'
@@ -609,8 +598,6 @@ def get_table_personal_references():
 def get_extra_table_personal_references():
     table_personal_references = document.add_table(rows=2, cols=8)
     table_personal_references.autofit = False
-    for row in table_personal_references.rows:
-        row.height = Cm(0.64)
 
     second_row = table_personal_references.rows[0].cells
     second_row[0].text = 'Full Name'
@@ -651,8 +638,6 @@ def get_table_additional_questions():
     header_cell._tc.get_or_add_tcPr().append(table_header_color)
 
     table_additional_questions.autofit = False
-    for row in table_additional_questions.rows:
-        row.height = Cm(0.64)
 
     for row_number in range(1,12):
         if row_number%2 != 0:
@@ -694,9 +679,6 @@ def get_additionals_questions_text():
 
 def get_table_sign():
     table_sign = document.add_table(4,3)
-
-    for row in table_sign.rows:
-        row.height = Cm(1.4)
 
     first_row = table_sign.rows[0].cells
     first_row[0].text = ''

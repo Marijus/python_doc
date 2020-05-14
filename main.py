@@ -126,7 +126,6 @@ def get_table_applicant_information():
 
     table_applicant_information.autofit = False
     for row in table_applicant_information.rows:
-        row.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
         row.height = Cm(0.7)
 
     header_cell = get_merge_cells(table_applicant_information,0,0,5)
@@ -165,7 +164,6 @@ def get_table_additional_occupant(rows=4):
     table_additional_occupant.autofit = False
 
     for row in table_additional_occupant.rows:
-        row.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
         row.height = Cm(0.62)
     paragraph = document.add_paragraph()
     paragraph.aligmnet = WD_TAB_ALIGNMENT
@@ -494,7 +492,6 @@ def get_table_additional_income():
 
     table_additional_income.autofit = False
     for row in table_additional_income.rows:
-        row.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
         row.height = Cm(0.64)
 
     for row_number in range(1,3):
@@ -524,7 +521,6 @@ def get_table_vehicle_information():
 
     table_vehicle_information.autofit = False
     for row in table_vehicle_information.rows:
-        row.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
         row.height = Cm(0.64)
 
     for row_number in range(1,3):
@@ -553,7 +549,6 @@ def get_table_pets_information():
 
     table_pets_information.autofit = False
     for row in table_pets_information.rows:
-        row.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
         row.height = Cm(0.64)
 
     row = table_pets_information.rows[1].cells
@@ -586,7 +581,6 @@ def get_table_personal_references():
 
     table_personal_references.autofit = False
     for row in table_personal_references.rows:
-        row.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
         row.height = Cm(0.64)
 
     second_row = table_personal_references.rows[1].cells
@@ -616,7 +610,6 @@ def get_extra_table_personal_references():
     table_personal_references = document.add_table(rows=2, cols=8)
     table_personal_references.autofit = False
     for row in table_personal_references.rows:
-        row.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
         row.height = Cm(0.64)
 
     second_row = table_personal_references.rows[0].cells
@@ -659,7 +652,6 @@ def get_table_additional_questions():
 
     table_additional_questions.autofit = False
     for row in table_additional_questions.rows:
-        row.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
         row.height = Cm(0.64)
 
     for row_number in range(1,12):
@@ -704,7 +696,6 @@ def get_table_sign():
     table_sign = document.add_table(4,3)
 
     for row in table_sign.rows:
-        row.height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
         row.height = Cm(1.4)
 
     first_row = table_sign.rows[0].cells

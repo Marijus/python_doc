@@ -483,7 +483,7 @@ def get_table_employment_information_no_header():
 def get_table_additional_income():
     table_additional_income = document.add_table(rows=3, cols=7)
     header_cell = get_merge_cells(table_additional_income, 0, 0, 6)
-    header_cell.text = 'ADDITIONAL_INCOME'
+    header_cell.text = 'additional income'.upper()
     table_header_color = parse_xml(r'<w:shd {} w:fill="#1f3864"/>'.format(nsdecls('w')))
     header_cell._tc.get_or_add_tcPr().append(table_header_color)
 

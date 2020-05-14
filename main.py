@@ -481,29 +481,38 @@ def get_table_employment_information_no_header():
 
 
 def get_table_additional_income():
-    table_additional_income = document.add_table(rows=3, cols=7)
-    header_cell = get_merge_cells(table_additional_income, 0, 0, 6)
-    header_cell.text = 'additional income'.upper()
+    table_additional_income = document.add_table(rows=3, cols=6)
+
+    for index, column in enumerate(table_additional_income.columns):
+        for cell in column.cells:
+            if index in [0, 4]:
+                cell.width = Inches(1.25)
+            elif index in [1]:
+                cell.width = Inches(2.5)
+            else:
+                cell.width = Inches(0.9)
+
+    i = 0
+    get_merge_cells(table_additional_income, i, 0, len(table_additional_income.columns) - 1)
+
+    current_row = table_additional_income.rows[i]
+
     table_header_color = parse_xml(r'<w:shd {} w:fill="#1f3864"/>'.format(nsdecls('w')))
-    header_cell._tc.get_or_add_tcPr().append(table_header_color)
+    current_row.cells[0]._tc.get_or_add_tcPr().append(table_header_color)
 
-    table_additional_income.autofit = False
+    current_row.cells[0].text = 'additional income'.upper()
 
-    for row_number in range(1,3):
-        row = table_additional_income.rows[row_number].cells
-        row[0].text = 'Source of Income'
-        row_1_2 = get_merge_cells(table_additional_income, row_number, 1, 2)
-        set_cell_border(row_1_2, bottom={"sz": 6, "color": "#000000", "val": "single"})
-        row[3].text = 'Amount $'
-        set_cell_border(row[4], bottom={"sz": 6, "color": "#000000", "val": "single"})
-        row[5].text = 'Proof of Income'
-        row[6].text = f'YES {CHECK_BOX} NO {CHECK_BOX}'
+    for i in range(1,3):
 
-    paragraph = document.add_paragraph()
-    paragraph.aligmnet = WD_TAB_ALIGNMENT
-    paragraph_font = paragraph.style.font
-    paragraph_font.name = 'Calibri'
-    paragraph_font.size = Pt(10)
+        current_row = table_additional_income.rows[i]
+
+        current_row.cells[0].text = 'Source of Income'
+        current_row.cells[2].text = 'Amount $'
+        current_row.cells[4].text = 'Proof of Income'
+        current_row.cells[5].text = f'YES {CHECK_BOX} NO {CHECK_BOX}'
+
+        set_cell_border(current_row.cells[1], bottom={"sz": 6, "color": "#000000", "val": "single"})
+        set_cell_border(current_row.cells[3], bottom={"sz": 6, "color": "#000000", "val": "single"})
 
 
 def get_table_vehicle_information():
